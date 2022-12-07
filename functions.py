@@ -41,7 +41,6 @@ def hedged_portfolio():
     cash_flow = 0
     portfolio_position = {"puts": -100, "shares": 0, "cash": 0}
     portfolio_value = 0
-    delta = 0
     wells_fargo_apr = 0.0015
     vol_index = .2621
     df = csv_df()
@@ -111,7 +110,7 @@ def hedged_portfolio():
         print("For the hedged portfolio we have:", portfolio_position)
         print()
 
-    return
+    return portfolio_position
 
 
 def unhedged_portfolio():
@@ -150,6 +149,8 @@ def option_1():
 
     # using black scholes put function to calculate the fair price of an option at t = 0
     print()
+    print("-------------------------------------------------------------------------------")
+    print("PART 1")
     print("The price of one NVDA put option at "
           " \n- time: t = 0"
           " \n- with interest rate: r = {}"
@@ -163,9 +164,35 @@ def option_1():
     print("is\n$", put_option_t0)
 
     print()
+    x = hedged_portfolio()
+
+    print()
+    print("-------------------------------------------------------------------------------")
+    print("PART 2")
+    print("The final portfolio position at t = 12/52 is {'puts': -100, 'shares': -38.3814, 'cash': 6688.0421}")
+    print("At expiry, s_t =", df[28][14], "and the strike price of the option was", round(0.99 * float(df[28][2]), 4),
+          "so the put options are not exercised.")
+    print("We bring the options contract forward by selling the shares and accounting for the put options not"
+          " exercised")
+    print("We buy back", -x["shares"], "shares at", df[28][14], "dollars for a total of", x["shares"] * df[28][14])
+    print("Our new total cash is", round(x["cash"] + x["shares"] * df[28][14], 4))
+    final_cash = round(x["cash"] + x["shares"] * df[28][14], 4)
+    print("The final value of the hedged portfolio is {}".format("'puts': 0, 'shares': 0, 'cash':") +
+          str(final_cash))
+
+    print()
+    print("-------------------------------------------------------------------------------")
+    print("PART 3 ")
     print("The value of the unhedged portfolio at expiry is: ", unhedged_portfolio())
     print()
-    print(hedged_portfolio())
+    print("-------------------------------------------------------------------------------")
+    print("PART 4")
+    print("Ultimately the unhedged portfolio proved to be a better investment with a final value of $726.5224 compared"
+          " to the hedged portfolio's final value of $466.4172. Since the underlying asset went up in "
+          "price and the options were not executed, hedging was not needed though there's no way we could have"
+          " known that at t = 0 which is why hedging is a beneficial risk mitigation practice. Had the options been "
+          "exercised, we would have been much more prepared for the downside of the investment and our losses would "
+          "have been limited")
 
 
 def option_2():
