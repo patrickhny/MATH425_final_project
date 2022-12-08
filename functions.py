@@ -18,9 +18,9 @@ def black_scholes_put(vol, T, t, r, s_t, E):
     # function returns the fair price of a put option under the Black_scholes model given:
     # spot price of an asset = s_t, strike price = k_strike, risk-free rate = r, time to maturity = t_expiry,
     # and volatility = vol
-    d1_value = (1 / (vol * sqrt(T -t))) * (((r + (vol ** 2 / 2)) * (T - t)) + log(s_t / E))
+    d1_value = (1 / (vol * sqrt(T - t))) * (((r + (vol ** 2 / 2)) * (T - t)) + log(s_t / E))
     d2_value = d1_value - vol * sqrt(T - t)
-    put_option_price = (E * e**(-r * (T - t)) * norm.cdf(-d2_value)) - (s_t * norm.cdf(-d1_value))
+    put_option_price = (E * e ** (-r * (T - t)) * norm.cdf(-d2_value)) - (s_t * norm.cdf(-d1_value))
     return round(put_option_price, 4)
 
 
@@ -61,7 +61,7 @@ def hedged_portfolio():
         print("t =", round(time_t, 4))
         print("------------")
         print()
-        interest_cash = cash_flow * e**(wells_fargo_apr * (time_T - time_t))
+        interest_cash = cash_flow * e ** (wells_fargo_apr * (time_T - time_t))
         print("cash with earned interest =", round(interest_cash, 4))
         cash_flow = interest_cash
         cash_flow += put_option_hundred_value
@@ -96,11 +96,11 @@ def hedged_portfolio():
             print("We lose", cash, "dollars")
             print("Net cash-flow is", cash_flow, "dollars")
 
-        portfolio_position["shares"] = round(100 * delta_now , 4)
+        portfolio_position["shares"] = round(100 * delta_now, 4)
         portfolio_position["cash"] = round(cash_flow, 4)
 
         delta_previous = delta_now
-        time_t += 1/52
+        time_t += 1 / 52
         put_option_hundred_value = 0
         print()
         # print("new time_t =", time_t)
@@ -121,7 +121,7 @@ def unhedged_portfolio():
                                       0.99 * float(df[28][2]))
     price_week_13 = float(df[28][14])
     portfolio_cash = 100 * put_option_t0
-    portfolio_cash_at_expiry = portfolio_cash * e**(wells_fargo_apr * 13/52)
+    portfolio_cash_at_expiry = portfolio_cash * e ** (wells_fargo_apr * 13 / 52)
     strike = 0.99 * float(df[28][2])
     portfolio_value = max(0.0, (strike - price_week_13))
     portfolio_0 = {"puts": -100, "cash": round(portfolio_cash, 4)}
@@ -130,6 +130,24 @@ def unhedged_portfolio():
     if portfolio_value == 0.0:
         portfolio_expiry["puts"] = 0
     return portfolio_expiry
+
+
+def historical_volatility():
+    delta_t = float(1 / 52)
+    M = 13
+    wells_fargo_apr = 0.0015
+    vol_index = .2621
+    df = csv_df()
+    prices = [float(df[28][i]) for i in range(2, 15)]
+    prices.reverse()
+    sum_volatility = 0
+    for i in range(M - 1):
+        sum_volatility += log(prices[i] / prices[i + 1]) ** 2
+
+    historical_volatility_value = \
+        (1 / sqrt(delta_t)) * sqrt(((1 / (M - 1)) * sum_volatility) -
+                                   ((1 / (M * (M - 1))) * sum_volatility))
+    return historical_volatility_value
 
 
 def option_1():
@@ -193,7 +211,18 @@ def option_1():
           " known that at t = 0 which is why hedging is a beneficial risk mitigation practice. Had the options been "
           "exercised, we would have been much more prepared for the downside of the investment and our losses would "
           "have been limited")
+    print()
+    print("-------------------------------------------------------------------------------")
+    print("PART 5")
+    print("Historical volatility =", round(historical_volatility(), 4))
+    print("The historical volatility was determined to be", round(historical_volatility(), 4), ". This value was larger"
+            " than the VIX volatility of", vol_index, "by almost 2x. When I ran the program with this volatility my "
+            "final portfolio valuation was 'puts': 0, 'shares': 0, 'cash': 1129.1184 .Using this historical volatility"
+            " would ultimately prove to be better but we wouldn't have had it at t = 0 anyways so its more of a "
+            "hindsight 20/20")
 
 
 def option_2():
-    print("option 2 executes")
+    print("Option 2 is still under development! Check the github repository for an up-to-date program with this feature"
+          " enabled!")
+    print("https://github.com/patrickhny/MATH425_final_project.git")
