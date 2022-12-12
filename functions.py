@@ -227,21 +227,59 @@ def option_1():
 
 
 def option_2():
-    print("Option 2 is still under development! Check the github repository for an up-to-date program with this feature"
-          " enabled!")
-    print("https://github.com/patrickhny/MATH425_final_project.git")
-    print()
+    # print("Option 2 is still under development! Check the github repository for an up-to-date program with this
+    # feature enabled!")
+    # print("https://github.com/patrickhny/MATH425_final_project.git")
     df = get_dataframe()
-    # print("stock names: ")
     columns = df["Stock"]
-    # user_stock = input("Enter name of stock: ")
-
     # print(columns)
     # print("columns size:", len(columns))
     stock_names = [columns[i] for i in range(0, (len(columns)))]
     print("choose from the following stocks: ")
     print("stock names:", sorted(stock_names))
     stock_name_user = input("Enter stock name: ")
-    if stock_name_user not in stock_names:
-        print("That stock is not in our spreadsheet. Try another!")
+    print()
 
+    while stock_name_user.upper() not in stock_names:
+        print("That stock is not in our spreadsheet. Try another!")
+        print("stock names:", sorted(stock_names))
+        stock_name_user = input("Enter stock name: ")
+        print()
+        continue
+
+    # interest_bool = False
+    # volatility_bool = False
+    input_bool = True
+    while input_bool:
+        try:
+            annual_interest_rate_user = float(input("Enter annual interest rate as a percent: "))
+            # print("You entered {}%. Is this correct?".format(annual_interest_rate_user))
+            '''
+            correctness_interest = input("Type (yes/no), (Y/N), (y/n): ")
+            correctness_interest.lower()
+            if correctness_interest == "no" or "n":
+                interest_bool = False
+            else:
+                continue
+            '''
+
+            volatility_user = float(input("Enter volatility: "))
+            '''
+            print("You entered {} for volatility. Is this correct?".format(volatility_user))
+            correctness_volatility = input("Type (yes/no), (Y/N), (y/n): ")
+            correctness_volatility.lower()
+            if correctness_volatility == "yes" or "y":
+                volatility_bool = True
+            else:
+                continue
+            '''
+            input_bool = False
+
+        except ValueError:
+            print("Input was non numerical. Try Again")
+            print()
+            continue
+
+
+def all_purpose_calc(r, vol, stock):
+    return 0
