@@ -1,4 +1,4 @@
-from functions import black_scholes_put, option_1, option_2
+from functions import option_1, option_2
 
 print("Hello! Welcome to Patrick Haney's MATH 425 Final Project. \nIn this program you will have two options: \n"
       " 1. Run program based on rubric \n 2. Enter your own information for your own calculations")

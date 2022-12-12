@@ -1,6 +1,6 @@
 from math import sqrt, e, log
 from scipy.stats import norm
-from pandas import read_csv
+import pandas as pd
 
 '''
 def black_scholes_call(s_t, k_strike, r, t_expiry, vol):
@@ -14,6 +14,14 @@ def black_scholes_call(s_t, k_strike, r, t_expiry, vol):
 '''
 
 
+def get_dataframe():
+    data = pd.read_csv("MATH425_Stock_prices_F22 - MATH425_Stock_prices_F22.csv")
+    df = pd.DataFrame(data, columns=[str("Stock"), str("initials"), "w2", "w3", "w4", "w5", "w6", "w7", "w8", "w9",
+                                     "w10", "w11", "w12", "w13", "w14"])
+    # print(df)
+    return df
+
+
 def black_scholes_put(vol, T, t, r, s_t, E):
     # function returns the fair price of a put option under the Black_scholes model given:
     # spot price of an asset = s_t, strike price = k_strike, risk-free rate = r, time to maturity = t_expiry,
@@ -25,7 +33,7 @@ def black_scholes_put(vol, T, t, r, s_t, E):
 
 
 def csv_df():
-    data = read_csv("MATH425_Stock_prices_F22 - MATH425_Stock_prices_F22.csv")
+    data = pd.read_csv("MATH425_Stock_prices_F22 - MATH425_Stock_prices_F22.csv")
     df = data.values
     return df
 
@@ -103,10 +111,6 @@ def hedged_portfolio():
         time_t += 1 / 52
         put_option_hundred_value = 0
         print()
-        # print("new time_t =", time_t)
-        # print("new delta now:", delta_now)
-        # print("new delta previous:", delta_previous)
-        # print()
         print("For the hedged portfolio we have:", portfolio_position)
         print()
 
@@ -226,3 +230,18 @@ def option_2():
     print("Option 2 is still under development! Check the github repository for an up-to-date program with this feature"
           " enabled!")
     print("https://github.com/patrickhny/MATH425_final_project.git")
+    print()
+    df = get_dataframe()
+    # print("stock names: ")
+    columns = df["Stock"]
+    # user_stock = input("Enter name of stock: ")
+
+    # print(columns)
+    # print("columns size:", len(columns))
+    stock_names = [columns[i] for i in range(0, (len(columns)))]
+    print("choose from the following stocks: ")
+    print("stock names:", sorted(stock_names))
+    stock_name_user = input("Enter stock name: ")
+    if stock_name_user not in stock_names:
+        print("That stock is not in our spreadsheet. Try another!")
+
